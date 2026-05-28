@@ -6,16 +6,43 @@ const defaultProfileImage = "/you're_almost_done_202604211133.png";
 export default function Home() {
   const [profileImage, setProfileImage] = useState(defaultProfileImage);
   const [imageError, setImageError] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const [adminToken, setAdminToken] = useState(() => localStorage.getItem('adminToken'));
+  const [adminName, setAdminName] = useState(() => localStorage.getItem('adminName') || '');
   const [typedText, setTypedText] = useState('');
   const fullText = 'Full Stack Backend Developer';
+  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+  const getResumeUrl = (url) => {
+    if (!url) return '';
+    return new URL(url, apiUrl).href;
+  };
 
   useEffect(() => {
     const savedImage = localStorage.getItem('profileImage');
     if (savedImage) {
       setProfileImage(savedImage);
     }
+    const onAuthChanged = () => {
+      setAdminToken(localStorage.getItem('adminToken'));
+      setAdminName(localStorage.getItem('adminName') || '');
+    };
+    window.addEventListener('authChanged', onAuthChanged);
+    window.addEventListener('storage', onAuthChanged);
+    return () => {
+      window.removeEventListener('authChanged', onAuthChanged);
+      window.removeEventListener('storage', onAuthChanged);
+    };
   }, []);
+
+  const initialsFromName = (name) => {
+    if (!name) return '';
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .slice(0, 2)
+      .join('')
+      .toUpperCase();
+  };
 
   useEffect(() => {
     let index = 0;
@@ -30,30 +57,28 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const dataUrl = reader.result;
-        if (typeof dataUrl === 'string') {
-          localStorage.setItem('profileImage', dataUrl);
-          setProfileImage(dataUrl);
-          setImageError(false);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const handleImageError = () => {
     setImageError(true);
   };
 
-  const resetImage = () => {
-    localStorage.removeItem('profileImage');
-    setProfileImage(defaultProfileImage);
-    setImageError(false);
+  const handleDownloadCV = async () => {
+    try {
+      const response = await fetch(`${apiUrl}/api/profile/resume`);
+      if (!response.ok) {
+        alert('Resume URL not found. Please add one first.');
+        return;
+      }
+      
+      const data = await response.json();
+      if (data.success && data.data.resumeUrl) {
+        window.open(getResumeUrl(data.data.resumeUrl), '_blank');
+      } else {
+        alert('Resume URL not available');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to load resume');
+    }
   };
 
   return (
@@ -61,7 +86,7 @@ export default function Home() {
       <section className="pt-32 pb-20 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white min-h-screen flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="md:hidden flex flex-col items-center justify-center gap-4">
+            <div className="flex flex-col items-center justify-center gap-4 order-last md:order-last">
               <div className="relative w-full max-w-xs h-64 rounded-3xl shadow-2xl overflow-hidden border-4 border-gray-700 hover:border-blue-400 transition duration-300 bg-gray-800 group">
                 {!imageError ? (
                   <img
@@ -78,31 +103,18 @@ export default function Home() {
                     </div>
                   </div>
                 )}
-                {isEditing && (
-                  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                    <label className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg font-semibold cursor-pointer transition">
-                      Upload Photo
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
+              </div>
+
+              <div className="mt-4 flex justify-center">
+                {adminToken ? (
+                  <Link to="/admin" className="px-6 py-2 bg-blue-500 text-white rounded-lg font-semibold">Admin Dashboard</Link>
+                ) : (
+                  <Link to="/admin/login" className="px-6 py-2 bg-blue-500 text-white rounded-lg font-semibold">Login</Link>
                 )}
               </div>
-              {isEditing && profileImage !== defaultProfileImage && (
-                <button
-                  onClick={resetImage}
-                  className="px-4 py-2 text-sm text-gray-400 hover:text-red-400 hover:bg-gray-800 rounded transition"
-                >
-                  Reset to Default
-                </button>
-              )}
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-6 md:order-first">
               <div className="space-y-2">
                 <h1 className="text-5xl md:text-6xl font-bold">
                   Hi, I'm <span className="text-blue-400">Jackson Furaha</span>
@@ -126,11 +138,26 @@ export default function Home() {
                   View My Work
                 </Link>
                 <button
-                  onClick={() => setIsEditing(!isEditing)}
+                  onClick={handleDownloadCV}
                   className="px-8 py-3 border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-gray-900 rounded-lg font-semibold transition duration-300 inline-block"
                 >
-                  {isEditing ? 'Done Editing' : 'Edit Profile'}
+                  Download CV
                 </button>
+              </div>
+
+              <div className="flex flex-wrap gap-4 pt-4">
+                <Link
+                  to="/blog"
+                  className="px-8 py-3 bg-slate-700 hover:bg-slate-600 rounded-lg font-semibold transition duration-300 transform hover:scale-105 inline-block"
+                >
+                  Read Blogs
+                </Link>
+                <Link
+                  to="/admin/login"
+                  className="px-8 py-3 border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-gray-900 rounded-lg font-semibold transition duration-300 inline-block"
+                >
+                  Admin Login
+                </Link>
               </div>
 
               <div className="flex gap-6 pt-8 flex-wrap">
@@ -152,46 +179,6 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="hidden md:flex flex-col items-center justify-center gap-4">
-              <div className="relative w-80 h-80 rounded-3xl shadow-2xl overflow-hidden border-4 border-gray-700 hover:border-blue-400 transition duration-300 bg-gray-800 group">
-                {!imageError ? (
-                  <img
-                    src={profileImage}
-                    alt="Jackson Furaha"
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                    onError={handleImageError}
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                    <div className="text-center space-y-4">
-                      <div className="text-6xl">📸</div>
-                      <p className="text-white font-semibold">Image Failed</p>
-                    </div>
-                  </div>
-                )}
-                {isEditing && (
-                  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                    <label className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg font-semibold cursor-pointer transition">
-                      Upload Photo
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-                )}
-              </div>
-              {isEditing && profileImage !== defaultProfileImage && (
-                <button
-                  onClick={resetImage}
-                  className="px-4 py-2 text-sm text-gray-400 hover:text-red-400 hover:bg-gray-800 rounded transition"
-                >
-                  Reset to Default
-                </button>
-              )}
-            </div>
           </div>
         </div>
       </section>

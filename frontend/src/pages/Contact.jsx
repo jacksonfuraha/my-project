@@ -9,6 +9,8 @@ export default function Contact() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,12 +20,36 @@ export default function Contact() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    setSubmitted(true);
-    setFormData({ name: '', email: '', subject: '', message: '' });
-    setTimeout(() => setSubmitted(false), 5000);
+    setError(null);
+    setIsLoading(true);
+
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+    try {
+      const response = await fetch(`${apiUrl}/api/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        setError(result.message || 'Failed to send message.');
+      } else {
+        setSubmitted(true);
+        setFormData({ name: '', email: '', subject: '', message: '' });
+        setTimeout(() => setSubmitted(false), 5000);
+      }
+    } catch (fetchError) {
+      setError('Unable to reach the server. Please try again later.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -108,6 +134,11 @@ export default function Contact() {
                 ✓ Thank you! I'll get back to you soon.
               </div>
             )}
+            {error && (
+              <div className="bg-red-500 bg-opacity-20 border border-red-500 text-red-200 px-6 py-4 rounded-lg">
+                ⚠️ {error}
+              </div>
+            )}
 
             <div>
               <label htmlFor="name" className="block text-sm font-semibold mb-2">
@@ -175,9 +206,10 @@ export default function Contact() {
 
             <button
               type="submit"
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-semibold transition duration-300 transform hover:scale-105"
+              disabled={isLoading}
+              className={`w-full py-3 rounded-lg font-semibold transition duration-300 transform ${isLoading ? 'bg-blue-300 text-gray-200 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 text-white hover:scale-105'}`}
             >
-              Send Message
+              {isLoading ? 'Sending...' : 'Send Message'}
             </button>
           </form>
         </div>

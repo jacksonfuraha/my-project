@@ -1,4 +1,35 @@
+import { useEffect, useState } from 'react';
+
 export default function About() {
+  const [resumeAvailable, setResumeAvailable] = useState(false);
+  const [resumeUrl, setResumeUrl] = useState('');
+  const [loaded, setLoaded] = useState(false);
+  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+  const getResumeUrl = (url) => {
+    if (!url) return '';
+    return new URL(url, apiUrl).href;
+  };
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/api/profile`);
+        const data = await response.json();
+        if (response.ok && data.data?.resumeUrl) {
+          setResumeAvailable(true);
+          setResumeUrl(data.data.resumeUrl);
+        }
+      } catch (err) {
+        console.error('Unable to load profile:', err);
+      } finally {
+        setLoaded(true);
+      }
+    };
+
+    fetchProfile();
+  }, [apiUrl]);
+
   return (
     <section className="pt-32 pb-20 bg-gray-800 text-white min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -8,7 +39,7 @@ export default function About() {
           <div className="w-20 h-1 bg-blue-500 mx-auto"></div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="grid md:grid-cols-2 gap-12 items-start">
           {/* Left - Stats */}
           <div className="space-y-8">
             <p className="text-lg text-gray-300 leading-relaxed">
@@ -66,10 +97,23 @@ export default function About() {
             </div>
 
             <div className="bg-gray-700 p-6 rounded-lg hover:shadow-lg transition duration-300">
-              <h3 className="text-xl font-bold text-blue-400 mb-2">🎓 Continuous Learning</h3>
-              <p className="text-gray-300">
-                Always exploring new technologies and best practices in software engineering.
-              </p>
+              <h3 className="text-xl font-bold text-blue-400 mb-2">📄 Resume</h3>
+              {loaded ? (
+                resumeAvailable ? (
+                  <a
+                    href={getResumeUrl(resumeUrl)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-block px-6 py-3 bg-blue-500 hover:bg-blue-600 rounded-lg text-white transition"
+                  >
+                    Download Resume
+                  </a>
+                ) : (
+                  <p className="text-gray-300">Resume is not available yet.</p>
+                )
+              ) : (
+                <p className="text-gray-400">Loading resume status...</p>
+              )}
             </div>
           </div>
         </div>

@@ -30,7 +30,7 @@ const profileSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-    resume: {
+    resumeUrl: {
       type: String,
       default: null,
     },

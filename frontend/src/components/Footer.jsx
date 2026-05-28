@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
   return (
     <footer className="bg-gray-950 text-gray-400 py-12 border-t border-gray-800">
@@ -35,10 +36,11 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4">Resources</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-blue-400 transition">Blog</a></li>
+              <li><Link to="/blog" className="hover:text-blue-400 transition">Blog</Link></li>
+              <li><Link to="/admin/login" className="hover:text-blue-400 transition">Admin</Link></li>
               <li><a href="#" className="hover:text-blue-400 transition">GitHub</a></li>
               <li><a href="#" className="hover:text-blue-400 transition">LinkedIn</a></li>
-              <li><a href="#" className="hover:text-blue-400 transition">Resume</a></li>
+              <li><a href={`${apiUrl}/api/profile/resume`} className="hover:text-blue-400 transition">Resume</a></li>
             </ul>
           </div>
 
