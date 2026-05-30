@@ -105,13 +105,13 @@ export default function Home() {
                 )}
               </div>
 
-              <div className="mt-4 flex justify-center">
+              {/*<div className="mt-4 flex justify-center">
                 {adminToken ? (
                   <Link to="/admin" className="px-6 py-2 bg-blue-500 text-white rounded-lg font-semibold">Admin Dashboard</Link>
                 ) : (
                   <Link to="/admin/login" className="px-6 py-2 bg-blue-500 text-white rounded-lg font-semibold">Login</Link>
                 )}
-              </div>
+              </div>*/}
             </div>
 
             <div className="space-y-6 md:order-first">
@@ -152,12 +152,12 @@ export default function Home() {
                 >
                   Read Blogs
                 </Link>
-                <Link
+                {/*<Link
                   to="/admin/login"
                   className="px-8 py-3 border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-gray-900 rounded-lg font-semibold transition duration-300 inline-block"
                 >
                   Admin Login
-                </Link>
+                </Link>*/}
               </div>
 
               <div className="flex gap-6 pt-8 flex-wrap">
