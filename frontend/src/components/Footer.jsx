@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
+import { API_URL } from '../config/api';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
   return (
     <footer className="bg-gray-950 text-gray-400 py-12 border-t border-gray-800">

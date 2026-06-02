@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { API_URL, buildUrl } from '../config/api';
 
 const defaultProfileImage = "/you're_almost_done_202604211133.png";
 
@@ -10,11 +11,10 @@ export default function Home() {
   const [adminName, setAdminName] = useState(() => localStorage.getItem('adminName') || '');
   const [typedText, setTypedText] = useState('');
   const fullText = 'Full Stack Backend Developer';
-  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
   const getResumeUrl = (url) => {
     if (!url) return '';
-    return new URL(url, apiUrl).href;
+    return buildUrl(url);
   };
 
   useEffect(() => {

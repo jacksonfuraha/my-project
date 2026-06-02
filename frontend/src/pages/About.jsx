@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
+import { API_URL } from '../config/api';
 
 export default function About() {
   const [resumeAvailable, setResumeAvailable] = useState(false);
   const [resumeUrl, setResumeUrl] = useState('');
   const [loaded, setLoaded] = useState(false);
-  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
   const getResumeUrl = (url) => {
     if (!url) return '';
-    return new URL(url, apiUrl).href;
+    return new URL(url, API_URL).href;
   };
 
   useEffect(() => {
