@@ -84,30 +84,16 @@
               </Link>
             </div>
 
-            <div className="flex items-center space-x-2">
-              <div className="hidden md:block">
-                {adminToken ? (
-                  <Link to="/admin" className="px-5 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition">
-                    Admin Dashboard
-                  </Link>
-                ) : (
-                  <Link to="/admin/login" className="px-5 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition">
-                    Login
-                  </Link>
-                )}
-              </div>
-
-              <div className="md:hidden">
-                {adminToken ? (
-                  <Link to="/admin" className="px-4 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition">
-                    Admin
-                  </Link>
-                ) : (
-                  <Link to="/admin/login" className="px-4 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition">
-                    Login
-                  </Link>
-                )}
-              </div>
+            <div className="hidden md:flex items-center space-x-2">
+              {adminToken ? (
+                <Link to="/admin" className="px-5 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition">
+                  Admin Dashboard
+                </Link>
+              ) : (
+                <Link to="/admin/login" className="px-5 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition">
+                  Login
+                </Link>
+              )}
             </div>
 
             {/* show initials next to logo when logged in (no nav profile picture) */}
