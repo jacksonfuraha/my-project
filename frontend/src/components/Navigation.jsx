@@ -85,21 +85,6 @@
             </div>
 
             <div className="hidden md:flex items-center space-x-3">
-              {adminToken ? (
-                <Link
-                  to="/admin"
-                  className="px-5 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition min-w-max"
-                >
-                  Admin Dashboard
-                </Link>
-              ) : (
-                <Link
-                  to="/admin/login"
-                  className="px-5 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition min-w-max"
-                >
-                  Login
-                </Link>
-              )}
               {adminToken && adminEmail && (
                 <Link
                   to="/admin"
