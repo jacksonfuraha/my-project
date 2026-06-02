@@ -39,7 +39,7 @@
             </Link>
 
             {/* Desktop Menu */}
-            <div className="hidden md:flex items-center space-x-8">
+            <div className="hidden md:flex items-center justify-center flex-1 space-x-8">
               <Link
                 to="/"
                 className="hover:text-blue-400 transition duration-300"
@@ -84,20 +84,22 @@
               </Link>
             </div>
 
-            <div className="hidden md:flex items-center space-x-2">
+            <div className="hidden md:flex items-center space-x-3">
               {adminToken ? (
-                <Link to="/admin" className="px-5 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition">
+                <Link
+                  to="/admin"
+                  className="px-5 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition min-w-max"
+                >
                   Admin Dashboard
                 </Link>
               ) : (
-                <Link to="/admin/login" className="px-5 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition">
+                <Link
+                  to="/admin/login"
+                  className="px-5 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition min-w-max"
+                >
                   Login
                 </Link>
               )}
-            </div>
-
-            {/* show initials next to logo when logged in (no nav profile picture) */}
-            <div className="hidden md:flex items-center space-x-3">
               {adminToken && adminEmail && (
                 <Link
                   to="/admin"
