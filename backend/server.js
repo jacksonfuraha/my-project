@@ -39,6 +39,11 @@ app.use('/api/profile', profileRouter);
 app.use('/api/blogs', blogsRouter);
 app.use('/api/admin', adminRouter);
 
+// Public root route
+app.get('/', (req, res) => {
+  res.json({ success: true, message: 'Portfolio backend is live' });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'Server is running' });
