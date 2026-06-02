@@ -40,7 +40,7 @@ export default function Footer() {
               <li><Link to="/admin/login" className="hover:text-blue-400 transition">Admin</Link></li>
               <li><a href="#" className="hover:text-blue-400 transition">GitHub</a></li>
               <li><a href="#" className="hover:text-blue-400 transition">LinkedIn</a></li>
-              <li><a href={`${apiUrl}/api/profile/resume`} className="hover:text-blue-400 transition">Resume</a></li>
+              <li><a href={`${API_URL}/api/profile/resume`} className="hover:text-blue-400 transition">Resume</a></li>
             </ul>
           </div>
 
