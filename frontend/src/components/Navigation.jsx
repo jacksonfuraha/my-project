@@ -39,7 +39,7 @@
             </Link>
 
             {/* Desktop Menu */}
-            <div className="hidden md:flex space-x-8">
+            <div className="hidden md:flex items-center space-x-8">
               <Link
                 to="/"
                 className="hover:text-blue-400 transition duration-300"
@@ -82,13 +82,32 @@
               >
                 Contact
               </Link>
-              <div className="mx-12 mt-4 flex items-center">
-                  {adminToken ? (
-                    <Link to="/admin" className="px-6 py-2 bg-blue-500 text-white rounded-lg font-semibold">Admin Dashboard</Link>
-                  ) : (
-                    <Link to="/admin/login" className="px-6 py-2 bg-blue-500 text-white rounded-lg font-semibold">Login</Link>
-                  )}
-                </div>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <div className="hidden md:block">
+                {adminToken ? (
+                  <Link to="/admin" className="px-5 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition">
+                    Admin Dashboard
+                  </Link>
+                ) : (
+                  <Link to="/admin/login" className="px-5 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition">
+                    Login
+                  </Link>
+                )}
+              </div>
+
+              <div className="md:hidden">
+                {adminToken ? (
+                  <Link to="/admin" className="px-4 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition">
+                    Admin
+                  </Link>
+                ) : (
+                  <Link to="/admin/login" className="px-4 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition">
+                    Login
+                  </Link>
+                )}
+              </div>
             </div>
 
             {/* show initials next to logo when logged in (no nav profile picture) */}
@@ -171,6 +190,23 @@
               >
                 Contact
               </Link>
+              {adminToken ? (
+                <Link
+                  to="/admin"
+                  className="block w-full text-left px-4 py-2 bg-blue-500 text-white rounded"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Admin Dashboard
+                </Link>
+              ) : (
+                <Link
+                  to="/admin/login"
+                  className="block w-full text-left px-4 py-2 bg-blue-500 text-white rounded"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Login
+                </Link>
+              )}
             </div>
           )}
         </div>
