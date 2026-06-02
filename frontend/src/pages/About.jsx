@@ -14,7 +14,7 @@ export default function About() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await fetch(`${apiUrl}/api/profile`);
+        const response = await fetch(`${API_URL}/api/profile`);
         const data = await response.json();
         if (response.ok && data.data?.resumeUrl) {
           setResumeAvailable(true);
@@ -28,7 +28,7 @@ export default function About() {
     };
 
     fetchProfile();
-  }, [apiUrl]);
+  }, []);
 
   return (
     <section className="pt-32 pb-20 bg-gray-800 text-white min-h-screen">

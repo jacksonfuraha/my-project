@@ -63,7 +63,7 @@ export default function Home() {
 
   const handleDownloadCV = async () => {
     try {
-      const response = await fetch(`${apiUrl}/api/profile/resume`);
+      const response = await fetch(`${API_URL}/api/profile/resume`);
       if (!response.ok) {
         alert('Resume URL not found. Please add one first.');
         return;
