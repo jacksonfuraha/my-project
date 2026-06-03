@@ -172,7 +172,7 @@
               >
                 Contact
               </Link>
-              {!adminToken && (
+              {!adminToken ? (
                 <Link
                   to="/admin/login"
                   className="block w-full text-left px-4 py-2 bg-blue-500 text-white rounded"
@@ -180,6 +180,16 @@
                 >
                   Login
                 </Link>
+              ) : (
+                adminEmail && (
+                  <Link
+                    to="/admin"
+                    className="block w-full text-left px-4 py-2 bg-blue-500 text-white rounded"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Admin Dashboard
+                  </Link>
+                )
               )}
             </div>
           )}
