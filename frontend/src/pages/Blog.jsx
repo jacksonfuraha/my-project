@@ -65,14 +65,16 @@ export default function Blog() {
           <p className="mt-4 text-gray-300 max-w-2xl">
             Read the latest posts about backend architecture, APIs, developer tooling, and project-focused engineering.
           </p>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <Link
-              to={isAdmin ? '/admin' : '/admin/login'}
-              className="inline-flex items-center gap-2 rounded-3xl bg-blue-500 px-6 py-3 text-white font-semibold transition hover:bg-blue-600"
-            >
-              {isAdmin ? 'Create new blog' : 'Admin login'}
-            </Link>
-          </div>
+          {isAdmin && (
+            <div className="mt-8 flex flex-wrap gap-4">
+              <Link
+                to="/admin"
+                className="inline-flex items-center gap-2 rounded-3xl bg-blue-500 px-6 py-3 text-white font-semibold transition hover:bg-blue-600"
+              >
+                Create new blog
+              </Link>
+            </div>
+          )}
         </div>
 
         {loading && <p className="text-gray-300">Loading blog posts...</p>}
