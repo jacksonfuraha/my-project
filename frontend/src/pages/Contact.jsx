@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { API_URL } from '../config/api';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
